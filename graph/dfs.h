@@ -1,7 +1,6 @@
 #ifndef DFS_H
 #define DFS_H
 
-#include <vector>
 #include <unordered_map>
 
 template <class Vertex> class graph;

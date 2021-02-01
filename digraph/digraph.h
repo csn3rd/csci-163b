@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <queue>
+#include <list>
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -108,6 +108,20 @@ public:
 		_t[v].remove(w);
 	}
 
+	// return true if no cycles
+	bool isDAG() const {
+		DFS<Vertex> d(*this);
+		digraph<Vertex> back = d.back();
+		return (back.m() == 0);
+	}
+
+	// return topological order of vertices if is DAG
+	std::list<Vertex> ts() const {
+		assert(isDAG());
+		DFS<Vertex> d(*this);
+		return d.ts();
+	}
+
 private:
 	// adjacency "hashmap" representation
 	std::unordered_map<Vertex, VertexSet> _t;
@@ -156,7 +170,53 @@ std::ostream& operator << (std::ostream &os, digraph<Vertex> &D) {
 		}
 	}
 	os << std::endl;
-	
+
+	os << "DFS:" << std::endl;
+
+	DFS<Vertex> d(D);
+	std::unordered_map<Vertex, std::size_t> _pre = d.pre();
+	std::unordered_map<Vertex, std::size_t> _post = d.post();
+	std::unordered_map<Vertex, Vertex> _P = d.dfTree();
+	std::size_t nback = d.back().m();
+	std::size_t nforward = d.forward().m();
+	std::size_t ncross = d.cross().m();
+
+	os << "Pre:" << std::endl;
+	for (auto &p : _pre) {
+		os << p.first << ": " << p.second << std::endl;
+	}
+	os << std::endl;
+
+	os << "Post:" << std::endl;
+	for (auto &p : _post) {
+		os << p.first << ": " << p.second << std::endl;
+	}
+	os << std::endl;
+
+	os << "Parents:" << std::endl;
+	for (auto &p : _P) {
+		os << p.first << ": " << p.second << std::endl;
+	}
+	os << std::endl;
+
+	os << "# Back Edges: " << nback << std::endl;
+	os << "# Forward Edges: " << nforward << std::endl;
+	os << "# Cross Edges: " << ncross << std::endl;
+	os << std::endl;
+
+	if (D.isDAG()) {
+		os << "Graph is acyclic, a \"DAG\"." << std::endl;
+		os << "Topological Order:";
+		std::list<Vertex> ts = D.ts();
+		for (auto &v : ts) {
+			os << " " << v;
+		}
+		os << std::endl;
+	} else {
+		os << "Graph is not acyclic." << std::endl;
+	}
+	os << std::endl;
+
 	return os;
 }
 

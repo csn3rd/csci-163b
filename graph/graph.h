@@ -3,7 +3,6 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <queue>
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -246,13 +245,13 @@ std::ostream& operator << (std::ostream &os, graph<Vertex> &G) {
 	os << std::endl;
 
 	if (G.isTree()) {
-		os << "Graph is connected and acyclic." << std::endl;
+		os << "Graph is connected and acyclic, a \"tree\"." << std::endl;
 	} else if (G.isConnected()) {
-		os << "Graph is connected but not acyclic." << std::endl;
+		os << "Graph is connected and not acyclic." << std::endl;
 	} else if (G.isAcyclic()) {
-		os << "Graph is acyclic but not connected." << std::endl;
+		os << "Graph is not connected and acyclic." << std::endl;
 	} else {
-		os << "Graph is not connected or acyclic." << std::endl;
+		os << "Graph is not connected and not acyclic." << std::endl;
 	}
 	os << std::endl;
 
