@@ -70,13 +70,13 @@ public:
 	}
 
 	// return true if edge between v and w is bridge
-	bool isBridge(const Vertex &v, const Vertex &w) const {
+	bool isBridge(const Vertex &v, const Vertex &w) {
 		return ((_P.count(v) == 1 && _P[v] == w && _low[v] >= _pre[v])
 			|| (_P.count(w) == 1 && _P[w] == v && _low[w] >= _pre[w]));
 	}
 
 	// return true if vertex v is an articulation point
-	bool isArticulation(const Vertex &v) const {
+	bool isArticulation(const Vertex &v) {
 		if (_P.count(v) == 0) {				// root has more than one child
 			int nchildren(0);
 			for (auto &p : _P) {
