@@ -199,9 +199,30 @@ std::ostream& operator << (std::ostream &os, digraph<Vertex> &D) {
 	}
 	os << std::endl;
 
-	os << "# Back Edges: " << nback << std::endl;
-	os << "# Forward Edges: " << nforward << std::endl;
-	os << "# Cross Edges: " << ncross << std::endl;
+	os << "Back Edges: " << nback << std::endl;
+	for (auto &v : d.back().V()) {
+		for (auto &w : d.back().Adj(v)) {
+			os << v << " " << w << std::endl;
+		}
+	}
+	os << std::endl;
+
+	os << "Forward Edges: " << nforward << std::endl;
+	for (auto &v : d.forward().V()) {
+		for (auto &w : d.forward().Adj(v)) {
+			os << v << " " << w << std::endl;
+		}
+	}
+	os << std::endl;
+
+	os << "Cross Edges: " << ncross << std::endl;
+	for (auto &v : d.cross().V()) {
+		for (auto &w : d.cross().Adj(v)) {
+			os << v << " " << w << std::endl;
+		}
+	}
+	os << std::endl;
+	
 	os << std::endl;
 
 	if (D.isDAG()) {
