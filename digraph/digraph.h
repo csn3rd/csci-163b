@@ -222,7 +222,7 @@ std::ostream& operator << (std::ostream &os, digraph<Vertex> &D) {
 		}
 	}
 	os << std::endl;
-	
+
 	os << std::endl;
 
 	if (D.isDAG()) {
@@ -240,6 +240,5 @@ std::ostream& operator << (std::ostream &os, digraph<Vertex> &D) {
 
 	return os;
 }
-
 
 #endif // DIGRAPH_H
