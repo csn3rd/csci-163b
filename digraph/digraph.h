@@ -122,6 +122,27 @@ public:
 		return d.ts();
 	}
 
+	// return the reverse digraph
+	digraph<Vertex> reverse() const {
+		digraph<Vertex> rev;
+		for (auto &v : V()) {
+			rev.addVertex(v);
+		}
+		for (auto &v : V()) {
+			for (auto &w : Adj(v)) {
+				rev.addEdge(w, v);
+			}
+		}
+		return rev;
+	}
+
+	// return the strongly connected components using Kosaraju's algorithm
+	std::unordered_map<Vertex, std::size_t> Kscc() const {
+		DFS<Vertex> D1(reverse());
+		DFS<Vertex> D2(*this, D1.ts());
+		return D2.components();
+	}
+
 private:
 	// adjacency "hashmap" representation
 	std::unordered_map<Vertex, VertexSet> _t;
@@ -235,6 +256,13 @@ std::ostream& operator << (std::ostream &os, digraph<Vertex> &D) {
 		os << std::endl;
 	} else {
 		os << "Graph is not acyclic." << std::endl;
+	}
+	os << std::endl;
+
+	os << "Strongly Connected Components:" << std::endl;
+	std::unordered_map<Vertex, std::size_t> _C = D.Kscc();
+	for (auto &c : _C) {
+		os << c.first << ": " << c.second << std::endl;
 	}
 	os << std::endl;
 

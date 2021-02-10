@@ -9,16 +9,20 @@ template <class Vertex> class digraph;
 template <class Vertex>
 class DFS {
 public:
-	DFS(const digraph<Vertex> &D, const Vertex &start = Vertex()) {
-		_time = 0;
+	DFS(const digraph<Vertex> &D, const std::list<Vertex> &V = std::list<Vertex>()) {
+		_ncc = _time = 0;
 
-		if (D.isVertex(start)) {
-			dfs_one(D, start);
+		for (auto &v : V) {
+			if (D.isVertex(v) && _pre.count(v) == 0) {
+				dfs_one(D, v);
+				_ncc++;
+			}
 		}
 
 		for (auto &v : D.V()) {
 			if (_pre.count(v) == 0) {
 				dfs_one(D, v);
+				_ncc++;
 			}
 		}
 
@@ -44,6 +48,7 @@ public:
 
 	void dfs_one(const digraph<Vertex> &D, const Vertex &v) {
 		_pre[v] = _time++;
+		_C[v] = _ncc;
 		for (auto &w : D.Adj(v)) {
 			if (_pre.count(w) == 0) {
 				_P[w] = v;
@@ -67,6 +72,16 @@ public:
 	// parents of each vertex in Depth First Tree
 	std::unordered_map<Vertex, Vertex> dfTree() const {
 		return _P;
+	}
+
+	// component ids for each vertex
+	std::unordered_map<Vertex, std::size_t> components() const {
+		return _C;
+	}
+
+	// number of connected components
+	std::size_t ncc() const {
+		return _ncc;
 	}
 
 	// digraph of back edges
@@ -105,9 +120,9 @@ public:
 	}
 
 private:
-	std::unordered_map<Vertex, std::size_t> _pre, _post;
+	std::unordered_map<Vertex, std::size_t> _pre, _post, _C;
 	std::unordered_map<Vertex, Vertex> _P;
-	std::size_t _time;
+	std::size_t _time, _ncc;
 	digraph<Vertex> _back, _cross, _forward;
 	std::list<Vertex> _ts;
 
