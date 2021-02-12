@@ -4,6 +4,7 @@
 
 #include "digraph.h"
 #include "dfs.h"
+#include "tscc.h"
 
 using namespace std;
 

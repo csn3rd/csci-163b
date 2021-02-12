@@ -9,6 +9,7 @@
 #include <cassert>
 
 template <class Vertex> class DFS;
+template <class Vertex> class TSCC;
 
 template <class Vertex>
 class digraph {
@@ -259,8 +260,16 @@ std::ostream& operator << (std::ostream &os, digraph<Vertex> &D) {
 	}
 	os << std::endl;
 
-	os << "Strongly Connected Components:" << std::endl;
+	os << "Kosaraju Strongly Connected Components:" << std::endl;
 	std::unordered_map<Vertex, std::size_t> _C = D.Kscc();
+	for (auto &c : _C) {
+		os << c.first << ": " << c.second << std::endl;
+	}
+	os << std::endl;
+
+	os << "Tarjan Strongly Connected Components:" << std::endl;
+	TSCC<Vertex> t(D);
+	_C = t.components();
 	for (auto &c : _C) {
 		os << c.first << ": " << c.second << std::endl;
 	}
