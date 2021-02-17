@@ -25,6 +25,30 @@ public:
         return true;
     }
 
+    // return true and add edge if not already in graph
+    bool addEdge(const Edge<Vertex> &e, double c) {
+        return addEdge(e.v, e.w, c);
+    }
+
+    // return true and add edge if not already in graph
+    bool addEdge(const WEdge<Vertex> &e) {
+        return addEdge(e.v, e.w, e.c);
+    }
+
+	// removes edge if in graph
+    void removeEdge(const Vertex &v, const Vertex &w) {
+        graph<Vertex>::removeEdge(v, w);
+        _c.erase(Edge<Vertex>(v, w));
+        _c.erase(Edge<Vertex>(w, v));
+    }
+
+	// removes edge if in graph
+    void removeEdge(const Edge<Vertex> &e) {
+        graph<Vertex>::removeEdge(e.v, e.w);
+        _c.erase(e);
+        _c.erase(e.reverse());
+    }
+
     // return cost of edge
     double cost(const Vertex &v, const Vertex &w) const {
         assert(graph<Vertex>::isVertex(v) && graph<Vertex>::isVertex(w));

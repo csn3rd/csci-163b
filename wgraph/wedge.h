@@ -6,6 +6,11 @@ struct Edge {
     Vertex v, w;
 
     Edge(const Vertex &v, const Vertex &w) : v(v), w(w) { }
+
+    // returns the reverse of the edge
+    Edge<Vertex> reverse() const {
+        return Edge<Vertex>(w, v);
+    }
 };
 
 // compare edges
@@ -27,7 +32,6 @@ struct WEdge : public Edge<Vertex> {
 
     WEdge(const Vertex &v, const Vertex &w, double c) : Edge<Vertex>(v, w), c(c) { }
 };
-
 
 // compare wedges
 template <class Vertex>
