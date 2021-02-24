@@ -11,7 +11,10 @@ using namespace std;
 int main() {
 	wgraph<string> W;
 	cin >> W;
-	cout << W;
+	cout << W << endl;
 
-	ds<int> D;
+	wgraph<string> m = W.Kruskal_MST();
+	wgraph<string> n = W.Boruvka_MST();
+	cout << m << endl;
+	cout << n << endl;
 }

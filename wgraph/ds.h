@@ -38,7 +38,7 @@ public:
         if (_data[x] == _data[x]->parent) {
             return _data[x];
         }
-        return find_set(_data[x]->parent->key);
+        return (_data[x]->parent = find_set(_data[x]->parent->key));
     }
 
     bool join_sets(const T &x, const T &y) {

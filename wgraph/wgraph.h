@@ -2,9 +2,14 @@
 #define WGRAPH_H
 
 #include "../graph/graph.h"
+#include "../graph/bfs.h"
+#include "../graph/dfs.h"
+#include "../graph/eulerian.h"
 #include "wedge.h"
+#include "ds.h"
 
 #include <map>
+#include <set>
 
 
 template <class Vertex>
@@ -53,6 +58,72 @@ public:
     double cost(const Vertex &v, const Vertex &w) const {
         assert(graph<Vertex>::isVertex(v) && graph<Vertex>::isVertex(w));
         return _c.at(Edge<Vertex>(v, w));
+    }
+
+    std::set< WEdge<Vertex> > E() const {
+        std::set< WEdge<Vertex> > ans;
+        for (auto &v : graph<Vertex>::V()) {
+            for (auto &w : graph<Vertex>::Adj(v)) {
+                ans.insert(WEdge<Vertex>(v, w, cost(v,w)));
+            }
+        }
+        return ans;
+    }
+
+    wgraph<Vertex> Kruskal_MST() const {
+        assert(graph<Vertex>::isConnected());
+        wgraph<Vertex> ans;
+
+        ds<Vertex> d;
+
+        for (auto &v : graph<Vertex>::V()) {
+            ans.addVertex(v);
+            d.make_set(v);
+        }
+
+        for (auto &e : E()) {
+            if (d.join_sets(e.v, e.w)) {
+                ans.addEdge(e);
+            }
+        }
+
+        return ans;
+    }
+
+    wgraph<Vertex> Boruvka_MST() const {
+        assert(graph<Vertex>::isConnected());
+        wgraph<Vertex> ans;
+
+        ds<Vertex> d;
+
+        for (auto &v : graph<Vertex>::V()) {
+            ans.addVertex(v);
+            d.make_set(v);
+        }
+
+        while (ans.ncc() > 1) {
+            std::map<Vertex, WEdge<Vertex>> lightest;
+            
+            for (auto &e : E()) {
+                Vertex rv = d.find(e.v);
+                Vertex rw = d.find(e.w);
+
+                if (rv != rw) {
+                    if (lightest.count(rv) == 0 || lightest.at(e.v).c > e.c) {
+                        lightest[rv] = e;
+                    }
+                    if (lightest.count(rw) == 0 || lightest.at(e.w).c > e.c) {
+                        lightest[rw] = e;
+                    }
+                }
+            }
+
+            for (auto &p : lightest) {
+                ans.addEdge(p.second);
+            }
+        }
+
+        return ans;
     }
 
 private:
