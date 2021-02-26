@@ -5,6 +5,7 @@
 #include "wedge.h"
 #include "wgraph.h"
 #include "ds.h"
+#include "dary_heap.h"
 
 using namespace std;
 
@@ -14,7 +15,8 @@ int main() {
 	cout << W << endl;
 
 	wgraph<string> m = W.Kruskal_MST();
-	wgraph<string> n = W.Boruvka_MST();
 	cout << m << endl;
+
+	wgraph<string> n = W.Boruvka_MST();
 	cout << n << endl;
 }
