@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-    network<string> N;
+	network<string> N;
 	cin >> N;
 	cout << N << endl;
 }
