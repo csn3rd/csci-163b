@@ -2,7 +2,7 @@
 #define DARY_HEAP_H
 
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <cassert>
 
 
@@ -28,10 +28,10 @@ public:
 	}
 
 	void push(const T &x) {
-		aseert(_l.count(x) == 0);
+		assert(_l.count(x) == 0);
 
 		if (_n == _data.size()) {
-			_data.pushback(x);
+			_data.push_back(x);
 		} else {
 			_data[_n] = x;
 		}
@@ -53,7 +53,7 @@ public:
 		}
 	}
 
-	void decreaseKey(const T &x, const T &newX) {
+	void decrease_key(const T &x, const T &newX) {
 		assert(newX < x && _l.count(x) != 0 && _l.count(newX) == 0);
 
 		std::size_t i = _l[x];
@@ -93,7 +93,7 @@ public:
 				}
 			}
 
-			if (_data[m] >= _data[i]) {
+			if (_data[i] < _data[m]) {
 				break;
 			}
 
@@ -108,7 +108,7 @@ private:
 	std::vector<T> _data;                   // heap elements
 	std::size_t _n;                         // number of elements
 	std::size_t _d;                         // max children per node
-	std::unordered_map<T, std::size_t> _l;  // _data[_l[key]] = key;
+	std::map<T, std::size_t> _l;  			// _data[_l[key]] = key;
 
 };
 

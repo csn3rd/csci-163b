@@ -36,6 +36,11 @@ public:
 		return _c.at(e);
 	}    
 
+	void setCost(const Vertex &v, const Vertex &w, double newcost) {
+		assert(digraph<Vertex>::isEdge(v, w));
+		_c[Edge<Vertex>(v,w)] = newcost;
+	}
+
 	std::set< WEdge<Vertex> > E() const {
 		std::set< WEdge<Vertex> > ans;
 		for (auto &v : digraph<Vertex>::V()) {
@@ -78,6 +83,36 @@ public:
 
 		for (auto &p : parent) {
 			ans.addEdge(p.second, p.first, cost(p.second, p.first));
+		}
+
+		return ans;
+	}
+
+	network<Vertex> Floyd_Warshall() const {
+		network<Vertex> ans;
+
+		for (auto &v : digraph<Vertex>::V()) {
+			ans.addVertex(v);
+		}
+
+		for (auto &v : ans.V()) {
+			for (auto &w : ans.V()) {
+				if (v == w) {
+					ans.addEdge(v, w, 0.0);
+				} else if (digraph<Vertex>::isEdge(v, w)) {
+					ans.addEdge(v, w, cost(v, w));
+				} else {
+					ans.addEdge(v, w, std::numeric_limits<double>::infinity());
+				}
+			}
+		}
+
+		for (auto &m : ans.V()) {
+			for (auto &s : ans.V()) {
+				for (auto &d : ans.V()) {
+					ans.setCost(s, d, std::min(ans.cost(s, d), ans.cost(s, m) + ans.cost(m, d)));
+				}
+			}
 		}
 
 		return ans;

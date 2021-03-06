@@ -7,7 +7,10 @@
 #include "../graph/eulerian.h"
 #include "wedge.h"
 #include "ds.h"
+#include "dary_heap.h"
 
+#include <algorithm>
+#include <unordered_map>
 #include <map>
 #include <set>
 
@@ -121,6 +124,45 @@ public:
 				WEdge<Vertex> e = p.second;
 				ans.addEdge(e);
 				d.join_sets(e.v, e.w);
+			}
+		}
+
+		return ans;
+	}
+
+	wgraph<Vertex> Prim_MST() const {
+		std::unordered_map<Vertex, double> d;
+		Vertex s;
+		dary_heap< WEdge<Vertex> > H = dary_heap< WEdge<Vertex> >(2);
+		for (auto &v : graph<Vertex>::V()) {
+			d[v] = std::numeric_limits<double>::infinity();
+			if (d.size() == 0) {
+				d[v] = 0;
+				s = v;
+			}
+		}
+
+		std::unordered_map<Vertex, Vertex> parent;
+		wgraph<Vertex> ans;
+		for (auto &v : graph<Vertex>::V()) {
+			H.push(WEdge<Vertex>(v, v, d[v]));
+			parent[v] = v;
+		}
+
+		while (!H.empty()) {
+			WEdge<Vertex> x = H.min();
+			H.pop_min();
+			ans.addVertex(x.w);
+			if (x.w != s) {
+				ans.addEdge(x.v, x.w, x.c);
+			}
+			for (auto &y : graph<Vertex>::Adj(x.w)) {
+				double newcost = cost(x.w, y);
+				if (!ans.isVertex(y) && newcost < d[y]) {
+					H.decrease_key(WEdge<Vertex>(parent.at(y), y, d[y]), WEdge<Vertex>(x.w, y, newcost));
+					d[y] = newcost;
+					parent[y] = x.w;
+				}
 			}
 		}
 

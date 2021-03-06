@@ -19,4 +19,7 @@ int main() {
 
 	wgraph<string> n = W.Boruvka_MST();
 	cout << n << endl;
+
+	wgraph<string> o = W.Prim_MST();
+	cout << o << endl;
 }
