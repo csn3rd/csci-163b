@@ -133,7 +133,7 @@ public:
 	wgraph<Vertex> Prim_MST() const {
 		std::unordered_map<Vertex, double> d;
 		Vertex s;
-		dary_heap< WEdge<Vertex> > H = dary_heap< WEdge<Vertex> >(2);
+		dary_heap< WEdge<Vertex> > H = dary_heap< WEdge<Vertex> >(std::max(2, graph<Vertex>m()/graph<Vertex>n()));
 		for (auto &v : graph<Vertex>::V()) {
 			d[v] = std::numeric_limits<double>::infinity();
 			if (d.size() == 0) {
