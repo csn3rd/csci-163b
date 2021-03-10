@@ -97,16 +97,16 @@ public:
 		assert(isVertex(v));
 
 		for (auto &p : _t) {
-			p.second.remove(v);
+			p.second.erase(v);
 		}
 
-		_t.remove(v);
+		_t.erase(v);
 	}
 
 	// removes edge if in graph
 	void removeEdge(const Vertex &v, const Vertex &w) {
 		assert(isVertex(v) && isVertex(w) && isEdge(v, w));
-		_t[v].remove(w);
+		_t[v].erase(w);
 	}
 
 	// return true if no cycles

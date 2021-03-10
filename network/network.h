@@ -2,6 +2,8 @@
 #define NETWORK_H
 
 #include "../digraph/digraph.h"
+#include "../digraph/dfs.h"
+#include "../digraph/tscc.h"
 #include "../wgraph/wedge.h"
 
 #include <cassert>
