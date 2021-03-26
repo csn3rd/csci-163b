@@ -18,31 +18,37 @@ public:
 
 	network() { }
 
+	// add edge if not already in graph
 	void addEdge(const Vertex &v, const Vertex &w, double c) {
 		digraph<Vertex>::addEdge(v, w);
 		_c[Edge<Vertex>(v, w)] = c;
 	}
 
+	// add edge if not already in graph
 	void addEdge(const WEdge<Vertex> &e) {
 		digraph<Vertex>::addEdge(e.v, e.w);
 		_c[Edge<Vertex>(e.v, e.w)] = e.c;
 	}
 
+	// return cost of edge
 	double cost(const Vertex &v, const Vertex &w) const {
 		assert(digraph<Vertex>::isEdge(v, w));
 		return _c.at(Edge<Vertex>(v, w));
 	}
 
+	// return cost of edge
 	double cost(const Edge<Vertex> &e) {
 		assert(digraph<Vertex>::isEdge(e.v, e.w));
 		return _c.at(e);
 	}    
 
+	// update the cost of edge
 	void setCost(const Vertex &v, const Vertex &w, double newcost) {
 		assert(digraph<Vertex>::isEdge(v, w));
 		_c[Edge<Vertex>(v,w)] = newcost;
 	}
 
+	// return set of all edges
 	std::set< WEdge<Vertex> > E() const {
 		std::set< WEdge<Vertex> > ans;
 		for (auto &v : digraph<Vertex>::V()) {
@@ -53,6 +59,7 @@ public:
 		return ans;
 	}
 
+	// return the shortest distances from start vertex using Bellman Ford's Algorithm
 	network<Vertex> Bellman_Ford(const Vertex &s) const {
 		network<Vertex> ans;
 		std::unordered_map<Vertex, double> d, D;    // old and new distances from s
@@ -90,6 +97,7 @@ public:
 		return ans;
 	}
 
+	// return the shortest distances between all vertices using Floyd Warshall's Algorithm
 	network<Vertex> Floyd_Warshall() const {
 		network<Vertex> ans;
 
@@ -121,6 +129,7 @@ public:
 	}
 
 private:
+	// cost "red-black tree" representation
 	std::map<Edge<Vertex>, double> _c; 
 };
 
@@ -146,10 +155,10 @@ std::istream& operator >> (std::istream &is, network<Vertex> &N) {
 	return is;
 }
 
-// output wgraph
+// output network
 template <class Vertex>
 std::ostream& operator << (std::ostream &os, const network<Vertex> &N) {
-	os << "\nNetowrk:" << std::endl;
+	os << "\nNetwork:" << std::endl;
 	os << "# Vertices: " << N.n() << "\n# Edges: " << N.m() << std::endl << std::endl;
 
 	os << "Vertices:";

@@ -3,12 +3,16 @@
 
 #include <cassert>
 #include <queue>
+#include <unordered_map>
+#include <limits>
 
-#include "network.h"
+#include "../network/network.h"
 
 template <class T>
 class flow : public network<T> {
 public:
+
+    // constructor
 	flow(const T &source, const T &sink) {
 		assert(source != sink);
 		_source = source;
@@ -17,15 +21,18 @@ public:
 		network<T>::addVertex(_sink);
 	}
 
+    // add vertex if not already in graph
 	void addVertex(const T &v) {
-		assert(v != _source && v != _sink);
+		if (v == _source || v == _sink) return;
 		network<T>::addVertex(v);
 	}
 
+    // return whether the flow is empty
 	bool empty() const {
 		return (network<T>::m() == 0);
 	}
 
+    // return the total flow produced from source
 	double value() const {
 		double ans(0.0);
 		for (auto &v : network<T>::Adj(_source)) {
@@ -34,6 +41,7 @@ public:
 		return ans;
 	}
 
+    // combine this flow with another flow
 	void operator +=(const flow &f) {
 		for (auto &e : f.E()) {
 			if (network<T>::isEdge(e.v, e.w)) {
@@ -51,6 +59,8 @@ private:
 template <class T>
 class flownetwork : public network<T> {
 public:
+
+    // constructor
 	flownetwork(const T &source, const T &sink) {
 		assert(source != sink);
 		_source = source;
@@ -59,19 +69,23 @@ public:
 		network<T>::addVertex(_sink);
 	}
 
+    // add vertex if not in graph
 	void addVertex(const T &v) {
 		assert(v != _source && v != _sink);
 		network<T>::addVertex(v);
 	}
 
+    // return source vertex
 	T source() const {
 		return _source;
 	}
 
+    // return sink vertex
 	T sink() const {
 		return _sink;
 	}
 
+    // return an augmenting flow
 	flow<T> augmented_flow() {
 		// find a path with fewest edges from source to sink
 		std::queue<T> Q;
@@ -134,6 +148,7 @@ public:
 		return ans;
 	}
 
+    // return the max flow using Ford-Fulkerson algorithm
 	flow<T> max_flow() const {
 		flownetwork<T> residual(*this);
 		flow<T> ans(_source, _sink);
@@ -154,7 +169,6 @@ public:
 private:
 	T _source, _sink;
 };
-
 
 // input flownetwork
 template <class T>
@@ -183,27 +197,27 @@ std::istream& operator >> (std::istream &is, flownetwork<T> &F) {
 	return is;
 }
 
-// // output wgraph
-// template <class Vertex>
-// std::ostream& operator << (std::ostream &os, const network<Vertex> &N) {
-// 	os << "\nNetowrk:" << std::endl;
-// 	os << "# Vertices: " << N.n() << "\n# Edges: " << N.m() << std::endl << std::endl;
+// output flownetwork
+template <class Vertex>
+std::ostream& operator << (std::ostream &os, const flownetwork<Vertex> &N) {
+	os << "\nFlow Netowrk:" << std::endl;
+	os << "# Vertices: " << N.n() << "\n# Edges: " << N.m() << std::endl << std::endl;
 
-// 	os << "Vertices:";
-// 	for (auto &v : N.V()) {
-// 		os << " " << v;
-// 	}
-// 	os << std::endl << std::endl;
+	os << "Vertices:";
+	for (auto &v : N.V()) {
+		os << " " << v;
+	}
+	os << std::endl << std::endl;
 
-// 	os << "Edges: " << std::endl;
-// 	for (auto &v : N.V()) {
-// 		for (auto &w : N.Adj(v)) {
-// 			os << v << " " << w << " " << N.cost(v, w) << std::endl;
-// 		}
-// 	}
-// 	os << std::endl;
+	os << "Edges: " << std::endl;
+	for (auto &v : N.V()) {
+		for (auto &w : N.Adj(v)) {
+			os << v << " " << w << " " << N.cost(v, w) << std::endl;
+		}
+	}
+	os << std::endl;
 
-// 	return os;
-// }
+	return os;
+}
 
 #endif // FLOWNETWORK_H

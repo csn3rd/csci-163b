@@ -63,6 +63,7 @@ public:
 		return _c.at(Edge<Vertex>(v, w));
 	}
 
+	// return set of all edges
 	std::set< WEdge<Vertex> > E() const {
 		std::set< WEdge<Vertex> > ans;
 		for (auto &v : graph<Vertex>::V()) {
@@ -73,6 +74,7 @@ public:
 		return ans;
 	}
 
+	// return the minimum spanning wgraph using Kruskal's MST Algorithm
 	wgraph<Vertex> Kruskal_MST() const {
 		assert(graph<Vertex>::isConnected());
 		wgraph<Vertex> ans;
@@ -93,6 +95,7 @@ public:
 		return ans;
 	}
 
+	// return the minimum spanning wgraph using Boruvka's MST Algorithm
 	wgraph<Vertex> Boruvka_MST() const {
 		assert(graph<Vertex>::isConnected());
 		wgraph<Vertex> ans;
@@ -130,10 +133,11 @@ public:
 		return ans;
 	}
 
+	// return the minimum spanning wgraph using Prim's MST Algorithm
 	wgraph<Vertex> Prim_MST() const {
 		std::unordered_map<Vertex, double> d;
 		Vertex s;
-		dary_heap< WEdge<Vertex> > H = dary_heap< WEdge<Vertex> >(std::max(2, graph<Vertex>m()/graph<Vertex>n()));
+		dary_heap< WEdge<Vertex> > H = dary_heap< WEdge<Vertex> >(std::max((size_t)2, (graph<Vertex>::m()/graph<Vertex>::n())));
 		for (auto &v : graph<Vertex>::V()) {
 			d[v] = std::numeric_limits<double>::infinity();
 			if (d.size() == 0) {
