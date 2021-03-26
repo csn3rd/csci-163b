@@ -148,7 +148,7 @@ public:
 		return ans;
 	}
 
-    // return the max flow using Ford-Fulkerson algorithm
+    // return the max flow using Edmonds-Karp algorithm (Ford-Fulkerson algorithm)
 	flow<T> max_flow() const {
 		flownetwork<T> residual(*this);
 		flow<T> ans(_source, _sink);
