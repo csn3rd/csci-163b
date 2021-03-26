@@ -1,5 +1,5 @@
-# CSCI 163B / 164 - Advanced Theory of Algorithms
-Here is my code from CSCI 163B/164 with Professor Nicholas Tran.
+# CSCI 163B/164 - Advanced Theory of Algorithms
+Here is my C++ implementation of different graph algorithms from CSCI 163B/164 - Advanced Theory of Algorithms with Professor Nicholas Tran.
 
 ## graph
 
@@ -40,6 +40,9 @@ Here is my code from CSCI 163B/164 with Professor Nicholas Tran.
 ## network
 
 - Bellman-Ford Single Source Shortest Path Algorithm
+	- Negative Weight Cycles
+- Dijkstra Single Source Shortest Path Algorithm
+	- D-ary Heap Implementation
 - Floyd-Warshall All Pair Shortest Path Algorithm
 
 ## flownetwork

@@ -5,6 +5,7 @@
 #include "../digraph/dfs.h"
 #include "../digraph/tscc.h"
 #include "../wgraph/wedge.h"
+#include "../wgraph/dary_heap.h"
 
 #include <cassert>
 #include <map>
@@ -76,7 +77,7 @@ public:
 			for (auto &e : E()) {
 				double temp = d[e.v] + e.c;
 				if (temp < D[e.w]) {
-					D[e.w].temp;
+					D[e.w] = temp;
 					parent[e.w] = e.v;
 					if (i == digraph<Vertex>::n()) {
 						nwc = true;
@@ -90,8 +91,48 @@ public:
 			ans.digraph<Vertex>::addVertex(v);
 		}
 
-		for (auto &p : parent) {
-			ans.addEdge(p.second, p.first, cost(p.second, p.first));
+		if (!nwc) {
+			for (auto &p : parent) {
+				ans.addEdge(p.second, p.first, cost(p.second, p.first));
+			}
+		}
+
+		return ans;
+	}
+
+	// return the shortest distances from start vertex using Dijkstra's Algorithm
+	network<Vertex> Dijkstra(const Vertex &s) const {
+		network<Vertex> ans;
+		std::unordered_map<Vertex, double> d;		// distances from s
+		std::unordered_map<Vertex, Vertex> parent;	// parent
+
+		dary_heap< WEdge<Vertex> > H = dary_heap< WEdge<Vertex> >(std::max((size_t)2, (digraph<Vertex>::m()/digraph<Vertex>::n())));
+
+		for (auto &v : digraph<Vertex>::V()) {
+			d[v] = std::numeric_limits<double>::infinity();
+		}
+		d[s] = 0.0;
+
+		for (auto &v : digraph<Vertex>::V()) {
+			H.push(WEdge<Vertex>(v, v, d[v]));
+			parent[v] = v;
+		}
+
+		while (!H.empty()) {
+			WEdge<Vertex> x = H.min();
+			H.pop_min();
+			ans.addVertex(x.w);
+			if (x.w != s) {
+				ans.addEdge(x.v, x.w, cost(x.v, x.w));
+			}
+			for (auto &y : digraph<Vertex>::Adj(x.w)) {
+				double temp = d[x.w] + cost(x.w, y);
+				if (temp < d[y]) {
+					H.decrease_key(WEdge<Vertex>(parent.at(y), y, d[y]), WEdge<Vertex>(x.w, y, temp));
+					d[y] = temp;
+					parent[y] = x.w;
+				}
+			}
 		}
 
 		return ans;
