@@ -1,5 +1,5 @@
-# CSCI 163B - Advanced Theory of Algorithms
-Here is my C++ implementation of different graph algorithms from CSCI 163B - Advanced Theory of Algorithms with Professor Nicholas Tran.
+# CSCI 164 - Advanced Theory of Algorithms
+Here is my C++ implementation of different graph algorithms from CSCI 164 - Advanced Theory of Algorithms with Professor Nicholas Tran.
 
 ## graph
 
